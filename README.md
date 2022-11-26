@@ -22,7 +22,7 @@ The image includes a test script that can be used to verify its contents. No cha
 any tests fail.
 
 ```shell
-docker run -it --rm lacledeslan/gamesvr-fof ./ll-tests/gamesvr-fpf.sh;
+docker run -it --rm lacledeslan/gamesvr-fof ./ll-tests/gamesvr-fof.sh;
 ```
 
 ### Run Interactive Server
