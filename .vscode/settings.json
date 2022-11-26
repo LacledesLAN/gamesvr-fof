@@ -1,0 +1,22 @@
+{
+    "cSpell.words": [
+        "BUILDNODE",
+        "DOCKERHUB",
+        "Dockerized",
+        "gamesvr",
+        "Laclede's",
+        "Laclede’s",
+        "lacledeslan",
+        "norestart",
+        "srcds"
+    ],
+    "markdownlint.ignore": [
+        "**/LICENSE"
+    ],
+    "[markdown]": {
+        "editor.rulers": [140],
+        "editor.unicodeHighlight.ambiguousCharacters": true,
+        "editor.unicodeHighlight.invisibleCharacters": true,
+        "editor.wordWrap": "on",
+    }
+}
