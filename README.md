@@ -8,6 +8,8 @@ updates subsequently adding features and maps.
 
 ## Linux
 
+[![linux/amd64](https://github.com/LacledesLAN/gamesvr-fof/actions/workflows/build-linux-image.yml/badge.svg?branch=main)](https://github.com/LacledesLAN/gamesvr-fof/actions/workflows/build-linux-image.yml)
+
 ### Download
 
 ```shell
