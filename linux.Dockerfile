@@ -7,7 +7,7 @@ RUN echo "\n\nDownloading Fistful of Frags via SteamCMD"; `
         /app/steamcmd.sh +force_install_dir /output +login anonymous +app_update 295230 validate +quit;
 
 #=======================================================================
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 ARG BUILDNODE=unspecified
 ARG SOURCE_COMMIT=unspecified
