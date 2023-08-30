@@ -153,7 +153,7 @@ should_have 'Setting breakpad minidump AppID = 295230' 'Sever started executing'
 should_lack 'Running the dedicated server as root' 'Server is not running under root';
 should_have 'Server is hibernating' 'srcds_run succesfully hibernated';
 should_lack 'Your server needs to be restarted in order to receive the latest update.' 'Server is not reporting itself as out of date';
-
+should_lack "Warning: failed to init SDL thread priority manager: SDL not found" 'SDL thread priority manager is not missing';
 
 # Verify server responds to commands
 should_echo "say STARTING COMMAND TESTS" 'Console: STARTING COMMAND TESTS';

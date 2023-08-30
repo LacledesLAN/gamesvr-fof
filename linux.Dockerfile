@@ -1,10 +1,12 @@
 # escape=`
-FROM lacledeslan/steamcmd:linux as fof-builder
+FROM lacledeslan/steamcmd as fof-builder
 
 # Download Fistful of Frags via SteamCMD
 RUN echo "\n\nDownloading Fistful of Frags via SteamCMD"; `
         mkdir --parents /output; `
         /app/steamcmd.sh +force_install_dir /output +login anonymous +app_update 295230 validate +quit;
+
+COPY --chown=Fistful:root ./dist/linux/ll-tests /output/ll-tests
 
 #=======================================================================
 FROM debian:bookworm-slim
@@ -16,7 +18,7 @@ HEALTHCHECK NONE
 
 RUN dpkg --add-architecture i386 &&`
     apt-get update && apt-get install -y `
-        ca-certificates libtinfo5:i386 lib32gcc-s1 libstdc++6:i386 locales locales-all tini tmux &&`
+        ca-certificates libtinfo5:i386 lib32gcc-s1 libsdl2-2.0-0:i386 libstdc++6:i386 locales locales-all tini tmux &&`
     apt-get clean &&`
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*;
 
@@ -38,16 +40,13 @@ RUN useradd --home /app --gid root --system Fistful &&`
 
 # `RUN true` lines are work around for https://github.com/moby/moby/issues/36573
 COPY --chown=Fistful:root --from=fof-builder /output /app
-RUN true
 
-COPY --chown=Fistful:root ./dist/linux/ll-tests /app/ll-tests
-RUN chmod +x /app/ll-tests/*.sh;
-
-USER Fistful
-
-RUN echo $'\n\nLinking steamclient.so to prevent srcds_run errors' &&`
+RUN chmod +x /app/ll-tests/*.sh &&`
+    echo $'\n\nLinking steamclient.so to prevent srcds_run errors' &&`
         mkdir --parents /app/.steam/sdk32 &&`
         ln -s /app/bin/steamclient.so /app/.steam/sdk32/steamclient.so;
+
+USER Fistful
 
 WORKDIR /app
 

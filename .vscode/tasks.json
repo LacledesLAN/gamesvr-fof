@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Linux - Build Docker Image",
+            "label": "Build Linux Image",
             "type": "docker-build",
             "group": {
                 "kind": "build",
@@ -13,12 +13,24 @@
             "dockerBuild": {
                 "context": "${workspaceFolder}",
                 "dockerfile": "${workspaceFolder}/linux.Dockerfile",
-                "tag": "lacledeslan/gamesvr-fof",
+                "tag": "lltest/gamesvr-fof",
                 "labels": {
                     "com.lacledeslan.build-node": "${env:computername}",
                     "org.opencontainers.image.version": "dirty (work in progress)"
                 }
             }
-        }
+        },
+        {
+            "label": "Build & Execute Self Tests",
+            "type": "shell",
+            "command": "docker run -it --rm lltest/gamesvr-fof ./ll-tests/gamesvr-fof.sh;",
+            "dependsOn": "Build Linux Image",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "promptOnClose": true
+        },
     ]
 }
