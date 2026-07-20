@@ -1,17 +1,22 @@
-FROM lacledeslan/steamcmd as fof-builder
+FROM lacledeslan/steamcmd AS fof-builder
 
 # Download Fistful of Frags via SteamCMD
+
 RUN echo "\n\nDownloading Fistful of Frags via SteamCMD"; \
         mkdir --parents /output; \
         /app/steamcmd.sh +force_install_dir /output +login anonymous +app_update 295230 validate +quit;
 
 COPY --chown=Fistful:root ./dist/linux/ll-tests /output/ll-tests
 
-#=======================================================================
+
+#---------------------------------
 FROM debian:bookworm-slim
 
-ARG BUILD_NODE=unspecified
-ARG GIT_REVISION=unspecified
+ARG BUILD_DATE=unspecified \
+    BUILD_NODE=unspecified \
+    GIT_REVISION=unspecified
+
+ENV LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8 LC_ALL=en_US.UTF-8
 
 HEALTHCHECK NONE
 
@@ -21,22 +26,20 @@ RUN dpkg --add-architecture i386 && \
     apt-get clean && \
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*;
 
-ENV LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8 LC_ALL=en_US.UTF-8
-
 LABEL architecture="amd64" \
-    com.lacledeslan.build-node="$BUILD_NODE" \
-    maintainer="Laclede's LAN <contact@lacledeslan.com>" \
-    org.opencontainers.image.description="Fistful of Frags Dedicated Server" \
-    org.opencontainers.image.revision="$GIT_REVISION" \
-    org.opencontainers.image.source="https://github.com/LacledesLAN/gamesvr-fof" \
-    org.opencontainers.image.vendor="Laclede's LAN"
+      com.lacledeslan.build-node="$BUILD_NODE" \
+      maintainer="Laclede's LAN <contact@lacledeslan.com>" \
+      org.opencontainers.image.created="$BUILD_DATE" \
+      org.opencontainers.image.description="Fistful of Frags Dedicated Server" \
+      org.opencontainers.image.revision="$GIT_REVISION" \
+      org.opencontainers.image.source="https://github.com/LacledesLAN/gamesvr-fof" \
+      org.opencontainers.image.vendor="Laclede's LAN"
 
 # Set up Enviornment
 RUN useradd --home /app --gid root --system Fistful && \
     mkdir -p /app/ll-tests && \
     chown Fistful:root -R /app;
 
-# `RUN true` lines are work around for https://github.com/moby/moby/issues/36573
 COPY --chown=Fistful:root --from=fof-builder /output /app
 
 RUN chmod +x /app/ll-tests/*.sh && \
